@@ -1,0 +1,145 @@
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param width_P = 2.5*width_N
+.global gnd vdd
+.PARAM VDD_val = 1.8
+
+V_A A gnd PULSE(0 {VDD_val} 2n 100p 100p 16n 32n)
+V_B B gnd PULSE(0 {VDD_val} 2n 100p 100p 8n 16n)
+VDD vdd gnd 1.8
+*  D G S B
+
+* SPICE3 file created from XOR.ext - technology: scmos
+
+.option scale=0.09u
+
+M1000 B_bar a_1_196# vdd vdd CMOSP w=40 l=2
++  ad=400 pd=180 as=960 ps=368
+M1001 a_60_81# a_1_196# A_bar Gnd CMOSN w=40 l=2
++  ad=240 pd=92 as=200 ps=90
+M1002 vdd B_bar Y vdd CMOSP w=40 l=2
++  ad=0 pd=0 as=400 ps=180
+M1003 a_28_1# B_bar Y Gnd CMOSN w=40 l=2
++  ad=240 pd=92 as=200 ps=90
+M1004 a_28_152# B a_1_196# Gnd CMOSN w=40 l=2
++  ad=240 pd=92 as=200 ps=90
+M1005 gnd A_bar a_28_1# Gnd CMOSN w=40 l=2
++  ad=800 pd=360 as=0 ps=0
+M1006 gnd A a_60_81# Gnd CMOSN w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1007 Y A_bar vdd vdd CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1008 a_n4_81# B B_bar Gnd CMOSN w=40 l=2
++  ad=240 pd=92 as=200 ps=90
+M1009 gnd a_1_196# a_n4_81# Gnd CMOSN w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1010 gnd A a_28_152# Gnd CMOSN w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1011 vdd B a_1_196# vdd CMOSP w=40 l=2
++  ad=0 pd=0 as=400 ps=180
+M1012 vdd a_1_196# A_bar vdd CMOSP w=40 l=2
++  ad=0 pd=0 as=400 ps=180
+M1013 vdd B B_bar vdd CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1014 a_1_196# A vdd vdd CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+M1015 A_bar A vdd vdd CMOSP w=40 l=2
++  ad=0 pd=0 as=0 ps=0
+C0 vdd a_1_196# 0.13fF
+C1 a_1_196# B 0.35fF
+C2 vdd B 0.08fF
+C3 a_1_196# B_bar 0.15fF
+C4 vdd B_bar 0.14fF
+C5 vdd vdd 0.50fF
+C6 a_n4_81# B_bar 0.45fF
+C7 A_bar Y 0.08fF
+C8 vdd B 0.08fF
+C9 A a_1_196# 0.35fF
+C10 Y a_28_1# 0.41fF
+C11 a_28_152# gnd 0.41fF
+C12 A_bar a_1_196# 0.08fF
+C13 B B_bar 0.15fF
+C14 gnd Y 0.27fF
+C15 Y vdd 0.14fF
+C16 a_28_152# vdd 0.09fF
+C17 Y vdd 0.90fF
+C18 vdd A 0.08fF
+C19 A B 0.44fF
+C20 gnd vdd 0.03fF
+C21 a_1_196# vdd 1.14fF
+C22 gnd a_n4_81# 0.41fF
+C23 vdd vdd 0.10fF
+C24 A_bar B_bar 0.31fF
+C25 a_1_196# vdd 0.08fF
+C26 vdd vdd 0.06fF
+C27 A_bar A 0.08fF
+C28 gnd B_bar 0.12fF
+C29 B vdd 0.01fF
+C30 vdd B_bar 0.08fF
+C31 vdd B_bar 0.90fF
+C32 a_28_152# a_1_196# 0.41fF
+C33 A vdd 0.33fF
+C34 gnd A_bar 0.04fF
+C35 A_bar vdd 0.08fF
+C36 A_bar a_60_81# 0.41fF
+C37 A_bar vdd 1.30fF
+C38 gnd a_28_1# 0.41fF
+C39 A vdd 0.08fF
+C40 a_1_196# vdd 0.08fF
+C41 gnd vdd 0.31fF
+C42 A_bar vdd 0.14fF
+C43 gnd a_60_81# 0.41fF
+C44 gnd vdd 0.10fF
+C45 vdd vdd 0.05fF
+C46 Y B_bar 0.08fF
+C47 a_28_1# Gnd 0.01fF
+C48 a_60_81# Gnd 0.01fF
+C49 Y Gnd 3.85fF
+C50 a_n4_81# Gnd 0.01fF
+C51 A_bar Gnd 0.30fF
+C52 gnd Gnd 1.91fF
+C53 a_28_152# Gnd 0.01fF
+C54 B_bar Gnd 0.45fF
+C55 vdd Gnd 2.08fF
+C56 a_1_196# Gnd 0.42fF
+C57 A Gnd 0.85fF
+C58 B Gnd 0.85fF
+C59 vdd Gnd 1.67fF
+C60 vdd Gnd 0.22fF
+C61 vdd Gnd 1.67fF
+C62 vdd Gnd 1.67fF
+
+
+.tran 10p 50n
+.control
+set hcopypscolor=1
+set color0=white
+set color1=black
+
+run
+
+set curplottitle="2024102070  XOR gate using CMOS Post Layout using Magic"
+
+plot v(A)+4 v(B)+2 v(Y)
+
+let half_vdd = 0.9
+
+meas tran t_A_rise  WHEN v(A)=half_vdd  RISE=1
+meas tran t_Y_fall_A WHEN v(Y)=half_vdd FALL=1 TD=2n
+let tp_A = t_Y_fall_A - t_A_rise
+
+meas tran t_B_rise  WHEN v(B)=half_vdd  RISE=1
+meas tran t_Y_fall_B WHEN v(Y)=half_vdd FALL=1 TD=5n
+let tp_B = t_Y_fall_B - t_B_rise
+
+meas tran tphl  TRIG v(A) VAL=0.9 RISE=1  TARG v(Y) VAL=0.9 FALL=1
+meas tran tplh  TRIG v(B) VAL=0.9 FALL=1 TARG v(Y) VAL=0.9 RISE=1
+
+let tp_avg = (tphl + tplh)/2
+let tp_max = max(tp_A, tp_B)
+let tp_min = min(tp_A, tp_B)
+
+print tphl tplh tp_avg
+
+.endc

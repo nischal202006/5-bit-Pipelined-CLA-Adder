@@ -1,0 +1,79 @@
+**D-Flipflop
+.include TSMC_180nm.txt
+.param SUPPLY=1.8
+.global gnd vdd
+.param LAMBDA=0.09u
+.param width_N=1.8u
+.param width_P=2*width_N
+
+
+
+VDD vdd gnd 1.8
+Vin D gnd PULSE(0 1.8 5n 0 0 7.5n 15n)
+Vclk clk gnd 0
+
+M3 vdd  D R vdd     CMOSP W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+
+M2 R clk X vdd      CMOSP W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+
+M1 X D gnd gnd    CMOSN  W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+
+
+M6 vdd clk Y vdd    CMOSP W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+
+M10 Y1 X Y vdd CMOSP W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+
+M5 Y X Z gnd        CMOSN  W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+
+M4 Z clk gnd gnd  CMOSN  W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+
+
+M9 vdd Y Q_bar vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+M8 Q_bar clk P gnd  CMOSN  W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+
+M7 P Y gnd gnd    CMOSN  W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+
+Mn_inv      Q       Q_bar       gnd    gnd  CMOSN   W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+Mp_inv      Q       Q_bar       vdd    vdd  CMOSP   W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+.ic V(X)=0 V(Y)=0 V(P)=0 V(Q)=0 V(Q_bar)=1
+
+.control
+tran 0.1n 100n
+set hcopypscolor = 1 *White background for saving plots
+set color0=white ** color0 is used to set the background of the plot (manual sec:17.7))
+set color1=black ** color1 is used to set the grid color of the plot (manual sec:17.7))
+run
+plot v(X) v(D)+2
+
+meas tran D_50_rise  WHEN v(D)=0.9 RISE=2
+meas tran X_50_rise  WHEN v(X)=0.9 FALL=2
+let T_setup_rise = X_50_rise - D_50_rise
+meas tran D_50_fall  WHEN v(D)=0.9 FALL=1
+meas tran X_50_fall  WHEN v(X)=0.9 RISE=2
+let T_setup_fall = X_50_fall - D_50_fall
+let t_su = abs(T_setup_rise/2) + abs(T_setup_fall/2)
+print t_su
+.endc
+.end
+
+* in_50_rise          =  5.050000e-09
+* w12_50_rise         =  5.093190e-09
+* in_50_fall          =  1.265000e-08
+* w12_50_fall         =  1.270280e-08
+
+* T_setup_rise  =  43.19psec
+* T_setup_fall  =  52.80psec

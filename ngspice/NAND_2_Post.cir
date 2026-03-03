@@ -1,0 +1,71 @@
+* SPICE3 file created from NAND2.ext - technology: scmos
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param width_P = 2.5*width_N
+.global gnd vdd
+.PARAM VDD_val = 1.8
+
+V_A A gnd PULSE(0 {VDD_val} 2n 100p 100p 16n 32n)
+V_B B gnd PULSE(0 {VDD_val} 2n 100p 100p 8n 16n)
+VDD vdd gnd 1.8
+
+* SPICE3 file created from NAND2.ext - technology: scmos
+
+.option scale=0.09u
+
+M1000 Y B a_n15_n63# Gnd CMOSN w=40 l=2
++  ad=200 pd=90 as=240 ps=92
+M1001 vdd B Y w_n28_n3# CMOSP w=50 l=2
++  ad=500 pd=220 as=300 ps=112
+M1002 Y A vdd w_n28_n3# CMOSP w=50 l=2
++  ad=0 pd=0 as=0 ps=0
+M1003 a_n15_n63# A gnd Gnd CMOSN w=40 l=2
++  ad=0 pd=0 as=200 ps=90
+C0 vdd w_n28_n3# 0.18fF
+C1 A Y 0.01fF
+C2 Y w_n28_n3# 0.02fF
+C3 Y vdd 1.09fF
+C4 B gnd 0.04fF
+C5 B A 0.38fF
+C6 B w_n28_n3# 0.06fF
+C7 A w_n28_n3# 0.06fF
+C8 B Y 0.21fF
+C9 gnd Gnd 0.26fF
+C10 Y Gnd 0.12fF
+C11 vdd Gnd 0.06fF
+C12 B Gnd 0.27fF
+C13 A Gnd 0.24fF
+C14 w_n28_n3# Gnd 1.99fF
+
+
+.tran 10p 50n
+.control
+set hcopYpscolor = 1 *White background for saving plots
+set color0=white ** color0 is used to set the background of the plot (manual sec:17.7))
+set color1=black ** color1 is used to set the grid color of the plot (manual sec:17.7))
+
+run
+set curplottitle="2024102070  2 input NAND Gate using CMOS Post Layout using Magic"
+ 
+plot V(A)+4 V(B)+2 V(Y)
+let half_vdd = 0.9
+
+meas tran t_A_rise WHEN V(A)=half_vdd RISE=1
+meas tran t_Y_fall_A WHEN V(Y)=half_vdd FALL=1 TD=2n
+let tp_A = t_Y_fall_A - t_A_rise
+
+meas tran t_B_rise WHEN V(B)=half_vdd RISE=1
+meas tran t_Y_fall_B WHEN V(Y)=half_vdd FALL=1 TD=5n
+let tp_B = t_Y_fall_B - t_B_rise
+
+
+meas tran tphl trig v(a) val=0.9 rise=1 targ v(y) val=0.9 fall=1
+meas tran tplh trig v(b) val=0.9 fall=1 targ v(y) val=0.9 rise=1
+
+let tp_avg = (tphl + tplh) / 2
+let tp_max = max(tp_A, tp_B)
+let tp_min = min(tp_A, tp_B)
+
+print tphl tplh tp_avg
+.endc

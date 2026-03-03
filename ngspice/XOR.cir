@@ -1,0 +1,70 @@
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param width_P = 2.5*width_N
+.global gnd vdd
+.PARAM VDD_val = 1.8
+
+V_A A gnd PULSE(0 {VDD_val} 2n 100p 100p 16n 32n)
+V_B B gnd PULSE(0 {VDD_val} 2n 100p 100p 8n 16n)
+VDD vdd gnd 1.8
+*  D G S B
+
+Mn_inv_A      A_bar       A       gnd    gnd  CMOSN   W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+Mp_inv_A      A_bar       A       vdd    vdd  CMOSP   W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+Mn_inv_B      B_bar       B       gnd    gnd  CMOSN   W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+Mp_inv_B      B_bar       B       vdd    vdd  CMOSP   W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+Mp_A_PUN vdd A x1 vdd CMOSP   W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+Mp_B1_PUN x1 B_bar Y vdd CMOSP   W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+Mp_A1_PUN vdd A_bar x2 vdd CMOSP   W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+Mp_B_PUN  x2 B Y vdd CMOSP   W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+
+Mn_A_PDN Y A x3 gnd CMOSN   W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+Mn_B_PDN x3 B gnd gnd CMOSN   W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+Mn_A1_PDN Y A_bar x4 gnd CMOSN   W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+Mn_B1_PDN x4 B_bar gnd gnd CMOSN   W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+
+.tran 10p 50n
+.control
+set hcopY_barpscolor = 1 *White background for saving plots
+set color0=white ** color0 is used to set the background of the plot (manual sec:17.7))
+set color1=black ** color1 is used to set the grid color of the plot (manual sec:17.7))
+
+run
+set curplottitle="2024102070  XOR gate using CMOS"
+ 
+plot V(A)+4 V(B)+2 V(Y)
+let half_vdd = 0.9
+
+meas tran t_A_rise WHEN V(A)=half_vdd RISE=1
+meas tran t_Y_fall_A WHEN V(Y)=half_vdd FALL=1 TD=2n
+let tp_A = t_Y_fall_A - t_A_rise
+
+meas tran t_B_rise WHEN V(B)=half_vdd RISE=1
+meas tran t_Y_fall_B WHEN V(Y)=half_vdd FALL=1 TD=5n
+let tp_B = t_Y_fall_B - t_B_rise
+
+
+meas tran tphl trig v(a) val=0.9 rise=1 targ v(y) val=0.9 fall=1
+meas tran tplh trig v(b) val=0.9 fall=1 targ v(y) val=0.9 rise=1
+
+let tp_avg = (tphl + tplh) / 2
+let tp_max = max(tp_A, tp_B)
+let tp_min = min(tp_A, tp_B)
+
+print tphl tplh tp_avg
+.endc

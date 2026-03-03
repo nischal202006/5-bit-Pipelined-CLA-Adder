@@ -1,0 +1,117 @@
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param width_P = 2.5*width_N
+.global gnd vdd
+.PARAM VDD_val = 1.8
+
+V_D D gnd PULSE(0 1.8 5n 0 0 7.5n 15n)
+VDD vdd gnd 1.8
+V_Clock clk gnd PULSE(0 1.8 2n 0 0 4n 8n)
+
+*  D G S B
+* SPICE3 file created from D_FF.ext - technology: scmos
+
+.option scale=0.09u
+
+M1000 a_135_n69# Y gnd Gnd CMOSN w=40 l=2
++  ad=240 pd=92 as=600 ps=280
+M1001 X clk a_23_n27# w_10_n34# CMOSP w=90 l=2
++  ad=450 pd=190 as=540 ps=192
+M1002 Q_bar clk a_135_n69# Gnd CMOSN w=40 l=2
++  ad=200 pd=90 as=0 ps=0
+M1003 a_23_n27# D vdd w_10_n34# CMOSP w=90 l=2
++  ad=0 pd=0 as=1200 ps=520
+M1004 Q Q_bar gnd Gnd CMOSN w=20 l=2
++  ad=100 pd=50 as=0 ps=0
+M1005 Q Q_bar vdd w_182_n34# CMOSP w=50 l=2
++  ad=250 pd=110 as=0 ps=0
+M1006 Y clk vdd w_62_n20# CMOSP w=50 l=2
++  ad=250 pd=110 as=0 ps=0
+M1007 a_75_n69# clk gnd Gnd CMOSN w=40 l=2
++  ad=240 pd=92 as=0 ps=0
+M1008 Q_bar Y vdd w_122_n20# CMOSP w=50 l=2
++  ad=250 pd=110 as=0 ps=0
+M1009 Y X a_75_n69# Gnd CMOSN w=40 l=2
++  ad=200 pd=90 as=0 ps=0
+M1010 X D gnd Gnd CMOSN w=20 l=2
++  ad=120 pd=52 as=0 ps=0
+C0 w_122_n20# vdd 0.09fF
+C1 Q gnd 0.21fF
+C2 Y a_75_n69# 0.41fF
+C3 vdd w_182_n34# 0.09fF
+C4 Y w_62_n20# 0.08fF
+C5 D vdd 0.03fF
+C6 Q_bar a_135_n69# 0.41fF
+C7 Q_bar gnd 0.23fF
+C8 D clk 0.30fF
+C9 Q w_182_n34# 0.07fF
+C10 a_23_n27# w_10_n34# 0.01fF
+C11 gnd a_75_n69# 0.41fF
+C12 Y w_122_n20# 0.08fF
+C13 gnd a_135_n69# 0.41fF
+C14 Q_bar w_122_n20# 0.08fF
+C15 X clk 0.12fF
+C16 D w_10_n34# 0.08fF
+C17 Q_bar w_182_n34# 0.07fF
+C18 w_10_n34# X 0.12fF
+C19 a_75_n69# X 0.05fF
+C20 vdd clk 0.40fF
+C21 Q vdd 0.52fF
+C22 gnd X 0.26fF
+C23 vdd w_10_n34# 0.13fF
+C24 Y vdd 0.66fF
+C25 a_23_n27# X 0.93fF
+C26 w_10_n34# clk 0.08fF
+C27 Q_bar vdd 0.54fF
+C28 Y clk 0.41fF
+C29 vdd w_62_n20# 0.09fF
+C30 Q_bar clk 0.07fF
+C31 Q_bar Q 0.05fF
+C32 w_62_n20# clk 0.08fF
+C33 a_135_n69# clk 0.05fF
+C34 gnd clk 0.05fF
+C35 vdd a_23_n27# 0.93fF
+C36 a_135_n69# Gnd 0.01fF
+C37 a_75_n69# Gnd 0.01fF
+C38 gnd Gnd 0.97fF
+C39 Q Gnd 0.11fF
+C40 Q_bar Gnd 0.62fF
+C41 Y Gnd 1.67fF
+C42 X Gnd 0.22fF
+C43 vdd Gnd 2.01fF
+C44 clk Gnd 0.47fF
+C45 D Gnd 0.16fF
+C46 w_182_n34# Gnd 0.09fF
+C47 w_122_n20# Gnd 1.49fF
+C48 w_62_n20# Gnd 1.62fF
+C49 w_10_n34# Gnd 3.31fF
+
+.ic V(X)=0 V(Y)=0 V(P)=0 V(Q)=0 V(Q_bar)=1
+
+.tran 10p 50n
+.control
+set hcopypscolor = 1 *White background for saving plots
+set color0=white ** color0 is used to set the background of the plot (manual sec:17.7))
+set color1=black ** color1 is used to set the grid color of the plot (manual sec:17.7))
+
+run
+set curplottitle="2024102070 TSPC D-Flip Flop Post Layout using Magic"
+ 
+plot V(clk)+4 V(D)+2 V(Q)
+
+let half_vdd = 0.9
+
+meas tran t_clk_rise_edge WHEN V(clk)=half_vdd RISE=2
+meas tran t_q_rise_out WHEN V(Q)=half_vdd RISE=2 
+let t_prop_rise = t_q_rise_out - t_clk_rise_edge
+print t_prop_rise
+
+meas tran t_clk_fall_edge WHEN V(clk)=half_vdd RISE=3
+meas tran t_q_fall_out WHEN V(Q)=half_vdd FALL=2 
+let t_prop_fall = t_q_fall_out - t_clk_fall_edge
+print t_prop_fall
+let t_PCQ = (t_prop_fall + t_prop_rise)/2
+print t_PCQ
+
+.endc

@@ -1,0 +1,78 @@
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param width_P = 2.5*width_N
+.global gnd vdd
+.PARAM VDD_val = 1.8
+
+V_A A gnd PULSE(0 {VDD_val} 2n 100p 100p 32n 64n)
+V_B B gnd PULSE(0 {VDD_val} 2n 100p 100p 16n 32n)
+V_C C gnd PULSE(0 {VDD_val} 2n 100p 100p 8n 16n)
+V_D D gnd PULSE(0 {VDD_val} 2n 100p 100p 4n 8n)
+V_E E gnd PULSE(0 {VDD_val} 2n 100p 100p 2n 4n)
+VDD vdd gnd 1.8
+*  D G S B
+
+Mp_A_PUN  vdd A Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+  
+Mp_B_PUN  vdd B Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+Mp_C_PUN  vdd C Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+Mp_D_PUN  vdd D Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+Mp_E_PUN  vdd E Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+
+Mn_A_PDN Y  A x1 gnd CMOSN  W={5*width_N}   L={2*LAMBDA}
++ AS={5*5*width_N*LAMBDA} PS={10*LAMBDA+2*5*width_N} AD={5*5*width_N*LAMBDA} PD={10*LAMBDA+2*5*width_N}
+
+Mn_B_PDN x1 B x2 gnd CMOSN  W={5*width_N}   L={2*LAMBDA}
++ AS={5*5*width_N*LAMBDA} PS={10*LAMBDA+2*5*width_N} AD={5*5*width_N*LAMBDA} PD={10*LAMBDA+2*5*width_N}
+
+Mn_C_PDN x2 C x3 gnd CMOSN  W={5*width_N}   L={2*LAMBDA}
++ AS={5*5*width_N*LAMBDA} PS={10*LAMBDA+2*5*width_N} AD={5*5*width_N*LAMBDA} PD={10*LAMBDA+2*5*width_N}
+
+Mn_D_PDN x3 D x4 gnd CMOSN  W={5*width_N}   L={2*LAMBDA}
++ AS={5*5*width_N*LAMBDA} PS={10*LAMBDA+2*5*width_N} AD={5*5*width_N*LAMBDA} PD={10*LAMBDA+2*5*width_N}
+
+Mn_E_PDN x4 E gnd gnd CMOSN  W={5*width_N}   L={2*LAMBDA}
++ AS={5*5*width_N*LAMBDA} PS={10*LAMBDA+2*5*width_N} AD={5*5*width_N*LAMBDA} PD={10*LAMBDA+2*5*width_N}
+
+.tran 10p 50n
+.control
+
+
+run
+set curplottitle="2024102070 5 input NAND Gate using CMOS"
+ 
+plot V(A)+10 V(B)+8 V(C)+6 V(D)+4 V(E)+2 V(Y)
+let half_vdd = 0.9
+
+meas tran t_A_rise WHEN V(A)=half_vdd RISE=1
+meas tran t_Y_fall_A WHEN V(Y)=half_vdd FALL=1 TD=2n
+let tp_A = t_Y_fall_A - t_A_rise
+meas tran t_B_rise WHEN V(B)=half_vdd RISE=1
+meas tran t_Y_fall_B WHEN V(Y)=half_vdd FALL=1 TD=4n
+let tp_B = t_Y_fall_B - t_B_rise
+meas tran t_C_rise WHEN V(C)=half_vdd RISE=1
+meas tran t_Y_fall_C WHEN V(Y)=half_vdd FALL=1 TD=6n
+let tp_C = t_Y_fall_C - t_C_rise
+meas tran t_D_rise WHEN V(D)=half_vdd RISE=1
+meas tran t_Y_fall_D WHEN V(Y)=half_vdd FALL=1 TD=8n
+let tp_D = t_Y_fall_D - t_D_rise
+meas tran t_E_fall WHEN V(E)=half_vdd FALL=1
+meas tran t_Y_rise_E WHEN V(Y)=half_vdd RISE=1 TD=10n
+let tp_E = t_Y_rise_E - t_E_fall
+meas tran tphl trig v(a) val=0.9 rise=1 targ v(y) val=0.9 fall=1
+meas tran tplh trig v(e) val=0.9 fall=1 targ v(y) val=0.9 rise=1
+let tp_avg = (tphl + tplh) / 2
+let tp_max = max(tp_A, tp_B, tp_C, tp_D, tp_E)
+let tp_min = min(tp_A, tp_B, tp_C, tp_D, tp_E)
+print tphl tplh tp_avg
+
+.endc

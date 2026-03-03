@@ -1,0 +1,345 @@
+$date
+	Wed Dec 03 22:49:32 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module Course_Project_test $end
+$var wire 5 ! sum [4:0] $end
+$var wire 1 " Carry $end
+$var reg 5 # A [4:0] $end
+$var reg 5 $ B [4:0] $end
+$var reg 1 % clk $end
+$scope module dut $end
+$var wire 5 & A [4:0] $end
+$var wire 5 ' B [4:0] $end
+$var wire 1 % clk $end
+$var wire 5 ( sum_D [4:0] $end
+$var wire 5 ) sum [4:0] $end
+$var wire 5 * Q_B [4:0] $end
+$var wire 5 + Q_A [4:0] $end
+$var wire 1 " Carry $end
+$var wire 1 , C5 $end
+$scope module cla $end
+$var wire 1 - C0 $end
+$var wire 1 . C2 $end
+$var wire 1 / C3 $end
+$var wire 1 0 C4 $end
+$var wire 1 , Carry $end
+$var wire 5 1 sum [4:0] $end
+$var wire 5 2 P [4:0] $end
+$var wire 5 3 G [4:0] $end
+$var wire 1 4 C1 $end
+$var wire 5 5 B [4:0] $end
+$var wire 5 6 A [4:0] $end
+$upscope $end
+$scope module in_A $end
+$var wire 5 7 D [4:0] $end
+$var wire 1 % clk $end
+$var reg 5 8 Q [4:0] $end
+$upscope $end
+$scope module in_B $end
+$var wire 5 9 D [4:0] $end
+$var wire 1 % clk $end
+$var reg 5 : Q [4:0] $end
+$upscope $end
+$scope module out_Carry $end
+$var wire 1 , D $end
+$var wire 1 % clk $end
+$var reg 1 " Q $end
+$upscope $end
+$scope module out_Sum $end
+$var wire 5 ; D [4:0] $end
+$var wire 1 % clk $end
+$var reg 5 < Q [4:0] $end
+$upscope $end
+$upscope $end
+$scope task apply_testcase $end
+$var reg 5 = a_in [4:0] $end
+$var reg 5 > b_in [4:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+bx >
+bx =
+b0 <
+b0 ;
+b0 :
+b0 9
+b0 8
+b0 7
+b0 6
+b0 5
+04
+b0 3
+b0 2
+b0 1
+00
+0/
+0.
+0-
+0,
+b0 +
+b0 *
+b0 )
+b0 (
+b0 '
+b0 &
+0%
+b0 $
+b0 #
+0"
+b0 !
+$end
+#5000000000
+b0 >
+b0 =
+1%
+#10000000000
+0%
+#15000000000
+1%
+#20000000000
+0%
+#25000000000
+1%
+#26000000000
+b11 >
+b101 =
+#30000000000
+0%
+#32000000000
+b11 $
+b11 '
+b11 9
+b101 #
+b101 &
+b101 7
+#35000000000
+1.
+1/
+b1000 (
+b1000 1
+b1000 ;
+14
+b1 3
+b110 2
+b11 *
+b11 5
+b11 :
+b101 +
+b101 6
+b101 8
+1%
+#40000000000
+0%
+#45000000000
+b1000 !
+b1000 )
+b1000 <
+1%
+#46000000000
+b1010 >
+b111 =
+#50000000000
+0%
+#52000000000
+b1010 $
+b1010 '
+b1010 9
+b111 #
+b111 &
+b111 7
+#55000000000
+10
+b10001 (
+b10001 1
+b10001 ;
+04
+b10 3
+b1101 2
+b1010 *
+b1010 5
+b1010 :
+b111 +
+b111 6
+b111 8
+1%
+#60000000000
+0%
+#65000000000
+b10001 !
+b10001 )
+b10001 <
+1%
+#66000000000
+b1100 >
+b1111 =
+#70000000000
+0%
+#72000000000
+b1100 $
+b1100 '
+b1100 9
+b1111 #
+b1111 &
+b1111 7
+#75000000000
+0.
+b11011 (
+b11011 1
+b11011 ;
+b1100 3
+b11 2
+b1100 *
+b1100 5
+b1100 :
+b1111 +
+b1111 6
+b1111 8
+1%
+#80000000000
+0%
+#85000000000
+b11011 !
+b11011 )
+b11011 <
+1%
+#86000000000
+b1010 >
+b10101 =
+#90000000000
+0%
+#92000000000
+b1010 $
+b1010 '
+b1010 9
+b10101 #
+b10101 &
+b10101 7
+#95000000000
+00
+0/
+b11111 (
+b11111 1
+b11111 ;
+b0 3
+b11111 2
+b1010 *
+b1010 5
+b1010 :
+b10101 +
+b10101 6
+b10101 8
+1%
+#100000000000
+0%
+#105000000000
+b11111 !
+b11111 )
+b11111 <
+1%
+#106000000000
+b1 >
+b11111 =
+#110000000000
+0%
+#112000000000
+b1 $
+b1 '
+b1 9
+b11111 #
+b11111 &
+b11111 7
+#115000000000
+1.
+1/
+10
+1,
+b0 (
+b0 1
+b0 ;
+14
+b1 3
+b11110 2
+b1 *
+b1 5
+b1 :
+b11111 +
+b11111 6
+b11111 8
+1%
+#120000000000
+0%
+#125000000000
+b0 !
+b0 )
+b0 <
+1"
+1%
+#126000000000
+b100 >
+#130000000000
+0%
+#132000000000
+b100 $
+b100 '
+b100 9
+#135000000000
+0.
+10
+1,
+b11 (
+b11 1
+b11 ;
+04
+b100 3
+b11011 2
+b100 *
+b100 5
+b100 :
+1%
+#140000000000
+0%
+#145000000000
+b11 !
+b11 )
+b11 <
+1%
+#146000000000
+b11111 >
+#150000000000
+0%
+#152000000000
+b11111 $
+b11111 '
+b11111 9
+#155000000000
+1.
+b11110 (
+b11110 1
+b11110 ;
+14
+b11111 3
+b0 2
+b11111 *
+b11111 5
+b11111 :
+1%
+#160000000000
+0%
+#165000000000
+b11110 !
+b11110 )
+b11110 <
+1%
+#170000000000
+0%

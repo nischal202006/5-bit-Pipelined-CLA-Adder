@@ -1,0 +1,100 @@
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param width_P = 2.5*width_N
+.global gnd vdd
+.PARAM VDD_val = 1.8
+
+V_A A gnd PULSE(0 {VDD_val} 2n 100p 100p 32n 64n)
+V_B B gnd PULSE(0 {VDD_val} 2n 100p 100p 16n 32n)
+V_C C gnd PULSE(0 {VDD_val} 2n 100p 100p 8n 16n)
+V_D D gnd PULSE(0 {VDD_val} 2n 100p 100p 4n 8n)
+VDD vdd gnd 1.8
+*  D G S B
+* SPICE3 file created from NAND4.ext - technology: scmos
+
+.option scale=0.09u
+
+M1000 vdd D Y w_9_85# CMOSP w=50 l=2
++  ad=800 pd=332 as=600 ps=224
+M1001 a_38_n4# C a_30_n4# Gnd CMOSN w=80 l=2
++  ad=480 pd=172 as=480 ps=172
+M1002 vdd B Y w_9_85# CMOSP w=50 l=2
++  ad=0 pd=0 as=0 ps=0
+M1003 a_22_n4# A gnd Gnd CMOSN w=80 l=2
++  ad=480 pd=172 as=400 ps=170
+M1004 Y D a_38_n4# Gnd CMOSN w=80 l=2
++  ad=400 pd=170 as=0 ps=0
+M1005 Y C vdd w_9_85# CMOSP w=50 l=2
++  ad=0 pd=0 as=0 ps=0
+M1006 a_30_n4# B a_22_n4# Gnd CMOSN w=80 l=2
++  ad=0 pd=0 as=0 ps=0
+M1007 Y A vdd w_9_85# CMOSP w=50 l=2
++  ad=0 pd=0 as=0 ps=0
+C0 w_9_85# C 0.08fF
+C1 Y B 0.08fF
+C2 A w_9_85# 0.08fF
+C3 vdd B 0.10fF
+C4 Y a_22_n4# 0.05fF
+C5 Y a_38_n4# 0.88fF
+C6 B w_9_85# 0.08fF
+C7 B C 0.24fF
+C8 gnd a_22_n4# 0.82fF
+C9 A B 0.24fF
+C10 vdd Y 2.13fF
+C11 a_30_n4# a_22_n4# 0.82fF
+C12 a_38_n4# a_30_n4# 0.82fF
+C13 D Y 0.08fF
+C14 vdd D 0.10fF
+C15 Y w_9_85# 0.05fF
+C16 Y gnd 0.03fF
+C17 Y C 0.08fF
+C18 vdd w_9_85# 0.20fF
+C19 vdd C 0.10fF
+C20 D w_9_85# 0.08fF
+C21 A vdd 0.10fF
+C22 D C 0.24fF
+C23 Y a_30_n4# 0.05fF
+C24 a_38_n4# Gnd 0.01fF
+C25 a_30_n4# Gnd 0.01fF
+C26 a_22_n4# Gnd 0.01fF
+C27 gnd Gnd 0.19fF
+C28 Y Gnd 0.24fF
+C29 vdd Gnd 0.15fF
+C30 D Gnd 0.11fF
+C31 C Gnd 0.12fF
+C32 B Gnd 0.12fF
+C33 A Gnd 0.12fF
+C34 w_9_85# Gnd 2.99fF
+
+
+.tran 10p 50n
+.control
+set hcopYpscolor = 1 *White background for saving plots
+set color0=white ** color0 is used to set the background of the plot (manual sec:17.7))
+set color1=black ** color1 is used to set the grid color of the plot (manual sec:17.7))
+
+run
+set curplottitle="2024102070 4 input NAND Gate using CMOS"
+ 
+plot V(A)+8 V(B)+6 V(C)+4 V(D)+2 V(Y)
+let half_vdd = 0.9
+meas tran t_A_rise WHEN V(A)=half_vdd RISE=1
+meas tran t_Y_fall_A WHEN V(Y)=half_vdd FALL=1 TD=2n
+let tp_A = t_Y_fall_A - t_A_rise
+meas tran t_B_rise WHEN V(B)=half_vdd RISE=1
+meas tran t_Y_fall_B WHEN V(Y)=half_vdd FALL=1 TD=5n
+let tp_B = t_Y_fall_B - t_B_rise
+meas tran t_C_rise WHEN V(C)=half_vdd RISE=1
+meas tran t_Y_fall_C WHEN V(Y)=half_vdd FALL=1 TD=7n
+let tp_C = t_Y_fall_C - t_C_rise
+meas tran t_D_fall WHEN V(D)=half_vdd FALL=1
+meas tran t_Y_rise_D WHEN V(Y)=half_vdd RISE=1 TD=8n
+let tp_D = t_Y_rise_D - t_D_fall
+meas tran tphl trig v(a) val=0.9 rise=1 targ v(y) val=0.9 fall=1
+meas tran tplh trig v(d) val=0.9 fall=1 targ v(y) val=0.9 rise=1
+let tp_avg = (tphl + tplh) / 2
+
+print tphl tplh tp_avg
+
+.endc

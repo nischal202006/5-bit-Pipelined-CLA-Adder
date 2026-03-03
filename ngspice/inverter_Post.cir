@@ -1,0 +1,52 @@
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param width_P = 2.5*width_N
+.global gnd vdd
+.PARAM VDD_val = 1.8
+
+V_A A gnd PULSE(0 {VDD_val} 2n 100p 100p 16n 32n)
+VDD vdd gnd 1.8
+*  D G S B
+
+* SPICE3 file created from inverter.ext - technology: scmos
+
+.option scale=0.09u
+
+M1000 Y A gnd Gnd CMOSN w=20 l=2
++  ad=100 pd=50 as=100 ps=50
+M1001 Y A vdd vdd CMOSP w=50 l=2
++  ad=250 pd=110 as=250 ps=110
+C0 gnd A 0.05fF
+C1 Y vdd 0.07fF
+C2 vdd A 0.02fF
+C3 Y gnd 0.23fF
+C4 vdd vdd 0.10fF
+C5 vdd A 0.06fF
+C6 vdd Y 0.55fF
+C7 Y A 0.05fF
+C8 gnd Gnd 0.12fF
+C9 Y Gnd 0.11fF
+C10 vdd Gnd 0.00fF
+C11 A Gnd 0.20fF
+C12 vdd Gnd 1.49fF
+
+.tran 10p 50n
+.control
+set hcopYpscolor = 1 *White background for saving plots
+set color0=white ** color0 is used to set the background of the plot (manual sec:17.7))
+set color1=black ** color1 is used to set the grid color of the plot (manual sec:17.7))
+
+run
+set curplottitle="2024102070  Inverter Gate using CMOS Post layout using Magic"
+ 
+plot V(A)+4 V(Y)+2
+let half_vdd = 0.9
+
+meas tran tphl trig v(a) val=0.9 rise=1 targ v(y) val=0.9 fall=1
+meas tran tplh trig v(a) val=0.9 fall=1 targ v(y) val=0.9 rise=1
+
+let tp_avg = (tphl + tplh) / 2
+
+print tphl tplh tp_avg
+.endc

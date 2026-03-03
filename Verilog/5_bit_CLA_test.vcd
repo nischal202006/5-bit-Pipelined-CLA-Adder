@@ -1,0 +1,103 @@
+$date
+	Wed Dec 03 22:44:39 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module five_bit_CLA_test $end
+$var wire 5 ! sum [4:0] $end
+$var wire 1 " Carry $end
+$var reg 5 # A [4:0] $end
+$var reg 5 $ B [4:0] $end
+$scope module dut $end
+$var wire 5 % A [4:0] $end
+$var wire 5 & B [4:0] $end
+$var wire 1 ' C2 $end
+$var wire 1 ( C3 $end
+$var wire 1 ) C4 $end
+$var wire 1 " Carry $end
+$var wire 5 * sum [4:0] $end
+$var wire 5 + P [4:0] $end
+$var wire 5 , G [4:0] $end
+$var wire 1 - C1 $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+0-
+b0 ,
+b1 +
+b1 *
+0)
+0(
+0'
+b0 &
+b1 %
+b0 $
+b1 #
+0"
+b1 !
+$end
+#10
+b111 !
+b111 *
+b111 +
+b101 $
+b101 &
+b10 #
+b10 %
+#20
+1)
+1'
+1(
+b11000 !
+b11000 *
+1-
+b110 +
+b1001 ,
+b1011 $
+b1011 &
+b1101 #
+b1101 %
+#30
+0)
+0'
+0(
+b11111 !
+b11111 *
+0-
+b11111 +
+b0 ,
+b1010 $
+b1010 &
+b10101 #
+b10101 %
+#40
+1(
+1)
+1"
+1'
+b10 !
+b10 *
+1-
+b11100 +
+b11 ,
+b11 $
+b11 &
+b11111 #
+b11111 %
+#50
+b11110 !
+b11110 *
+b0 +
+b11111 ,
+b11111 $
+b11111 &
+#60

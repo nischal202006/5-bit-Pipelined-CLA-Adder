@@ -1,0 +1,104 @@
+magic
+tech scmos
+timestamp 1764583680
+<< nwell >>
+rect 9 100 70 162
+<< n_field_implant >>
+rect 59 106 64 146
+<< ntransistor >>
+rect 20 -9 22 91
+rect 28 -9 30 91
+rect 36 -9 38 91
+rect 44 -9 46 91
+rect 52 -9 54 91
+<< ptransistor >>
+rect 20 106 22 156
+rect 28 106 30 156
+rect 36 106 38 156
+rect 44 106 46 156
+rect 52 106 54 156
+<< ndiffusion >>
+rect 19 -9 20 91
+rect 22 -9 23 91
+rect 27 -9 28 91
+rect 30 -9 31 91
+rect 35 -9 36 91
+rect 38 -9 39 91
+rect 43 -9 44 91
+rect 46 -9 47 91
+rect 51 -9 52 91
+rect 54 -9 55 91
+<< pdiffusion >>
+rect 19 106 20 156
+rect 22 106 23 156
+rect 27 106 28 156
+rect 30 106 31 156
+rect 35 106 36 156
+rect 38 106 39 156
+rect 43 106 44 156
+rect 46 106 47 156
+rect 51 106 52 156
+rect 54 106 55 156
+<< ndcontact >>
+rect 15 -9 19 91
+rect 23 -9 27 91
+rect 31 -9 35 91
+rect 39 -9 43 91
+rect 47 -9 51 91
+rect 55 -9 59 91
+<< pdcontact >>
+rect 15 106 19 156
+rect 23 106 27 156
+rect 31 106 35 156
+rect 39 106 43 156
+rect 47 106 51 156
+rect 55 106 59 156
+<< polysilicon >>
+rect 20 156 22 173
+rect 28 156 30 173
+rect 36 156 38 173
+rect 44 156 46 173
+rect 52 156 54 173
+rect 20 91 22 106
+rect 28 91 30 106
+rect 36 91 38 106
+rect 44 91 46 106
+rect 52 91 54 106
+rect 20 -13 22 -9
+rect 28 -13 30 -9
+rect 36 -13 38 -9
+rect 44 -13 46 -9
+rect 52 -13 54 -9
+<< polycontact >>
+rect 19 173 23 177
+rect 27 173 31 177
+rect 35 173 39 177
+rect 43 173 47 177
+rect 51 173 55 177
+<< metal1 >>
+rect 19 177 23 181
+rect 27 177 31 181
+rect 35 177 39 181
+rect 43 177 47 181
+rect 51 177 55 181
+rect -8 161 70 165
+rect 15 156 19 161
+rect 31 156 35 161
+rect 47 156 51 161
+rect 23 98 27 106
+rect 39 98 43 106
+rect 55 98 59 106
+rect -8 93 19 97
+rect 23 94 82 98
+rect 15 91 19 93
+rect 55 91 59 94
+<< labels >>
+rlabel metal1 20 179 22 180 5 A
+rlabel metal1 28 179 30 180 5 B
+rlabel metal1 36 179 38 180 5 C
+rlabel metal1 44 179 46 180 5 D
+rlabel metal1 52 179 54 180 5 E
+rlabel metal1 -5 163 -3 164 3 vdd
+rlabel metal1 -5 95 -3 96 3 gnd
+rlabel metal1 74 94 78 96 1 Y
+<< end >>

@@ -1,0 +1,411 @@
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param width_P = 2.5*width_N
+.global gnd vdd
+.PARAM VDD_val = 1.8
+.param Ton=5n
+.param Tperiod={2*Ton}
+
+V_clk clk 0 PULSE(0 1.8 {0.3*Ton} 10p 10p {Ton} {Tperiod})
+V_A0 A0 gnd PULSE(0 {VDD_val} 0 100p 100p 4n 8n)
+V_A1 A1 gnd PULSE(0 {VDD_val} 0 100p 100p 8n 16n)
+V_A2 A2 gnd PULSE(0 {VDD_val} 0 100p 100p 16n 32n)
+V_A3 A3 gnd PULSE(0 {VDD_val} 0 100p 100p 32n 64n)
+V_A4 A4 gnd PULSE(0 {VDD_val} 0 100p 100p 64n 128n)
+
+V_B0 B0 gnd PULSE(0 {VDD_val} 0 100p 100p 4n 8n)
+V_B1 B1 gnd PULSE(0 {VDD_val} 0 100p 100p 8n 16n)
+V_B2 B2 gnd PULSE(0 {VDD_val} 0 100p 100p 16n 32n)
+V_B3 B3 gnd PULSE(0 {VDD_val} 0 100p 100p 32n 64n)
+V_B4 B4 gnd PULSE(0 {VDD_val} 0 100p 100p 64n 128n)
+VDD vdd gnd 1.8
+
+.subckt inv A A_bar vdd gnd
+.param LAMBDA = 0.09u
+.param width_N = {20*LAMBDA}
+.param width_P = {2.5*width_N}
+Mn_inv      A_bar       A       gnd    gnd  CMOSN   W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+Mp_inv      A_bar       A       vdd    vdd  CMOSP   W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}   
+.ends inv 
+
+.subckt D_FF D clk Q vdd gnd
+.param LAMBDA = 0.09u
+.param width_N = {20*LAMBDA}
+.param width_P = {2.5*width_N}
+M3 vdd  D R vdd     CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+M2 R clk X vdd      CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+M1 X D gnd gnd    CMOSN  W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M6 vdd clk Y1 vdd    CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+M10 Y1 X Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+M5 Y X Z gnd        CMOSN  W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M4 Z clk gnd gnd  CMOSN  W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M9 vdd Y Q_bar vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+M8 Q_bar clk P gnd  CMOSN  W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+M7 P Y gnd gnd    CMOSN  W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+Mn_inv      Q       Q_bar       gnd    gnd  CMOSN   W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+Mp_inv      Q       Q_bar       vdd    vdd  CMOSP   W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+.ends D_FF
+
+.subckt XOR A B Y vdd gnd
+.param LAMBDA = 0.09u
+.param width_N = {20*LAMBDA}
+.param width_P = {2.5*width_N}
+Mn_inv_A      A_bar       A       gnd    gnd  CMOSN   W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+Mp_inv_A      A_bar       A       vdd    vdd  CMOSP   W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mn_inv_B      B_bar       B       gnd    gnd  CMOSN   W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+Mp_inv_B      B_bar       B       vdd    vdd  CMOSP   W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_A_PUN vdd A x1 vdd CMOSP   W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+Mp_B1_PUN x1 B_bar Y vdd CMOSP   W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+Mp_A1_PUN vdd A_bar x2 vdd CMOSP   W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+Mp_B_PUN  x2 B Y vdd CMOSP   W={2*width_P}   L={2*LAMBDA}
++ AS={5*2*width_P*LAMBDA} PS={10*LAMBDA+2*2*width_P} AD={5*2*width_P*LAMBDA} PD={10*LAMBDA+2*2*width_P}
+Mn_A_PDN Y A x3 gnd CMOSN   W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+Mn_B_PDN x3 B gnd gnd CMOSN   W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+Mn_A1_PDN Y A_bar x4 gnd CMOSN   W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+Mn_B1_PDN x4 B_bar gnd gnd CMOSN   W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+.ends XOR
+
+.subckt NAND_2 A B Y vdd gnd
+.param LAMBDA = 0.09u
+.param width_N = {20*LAMBDA}
+.param width_P = {2.5*width_N}
+Mp_A_PUN  vdd A Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_B_PUN  vdd B Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mn_A_PDN Y A x gnd CMOSN  W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+Mn_B_PDN x B gnd gnd CMOSN  W={2*width_N}   L={2*LAMBDA}
++ AS={5*2*width_N*LAMBDA} PS={10*LAMBDA+2*2*width_N} AD={5*2*width_N*LAMBDA} PD={10*LAMBDA+2*2*width_N}
+.ends NAND_2
+
+
+.subckt NAND_3 A B C Y vdd gnd
+.param LAMBDA = 0.09u
+.param width_N = {20*LAMBDA}
+.param width_P = {2.5*width_N}
+Mp_A_PUN  vdd A Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_B_PUN  vdd B Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_C_PUN  vdd C Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mn_A_PDN Y A x1 gnd CMOSN  W={3*width_N}   L={2*LAMBDA}
++ AS={5*3*width_N*LAMBDA} PS={10*LAMBDA+2*3*width_N} AD={5*3*width_N*LAMBDA} PD={10*LAMBDA+2*3*width_N}
+Mn_B_PDN x1 B x2 gnd CMOSN  W={3*width_N}   L={2*LAMBDA}
++ AS={5*3*width_N*LAMBDA} PS={10*LAMBDA+2*3*width_N} AD={5*3*width_N*LAMBDA} PD={10*LAMBDA+2*3*width_N}
+Mn_C_PDN x2 C gnd gnd CMOSN  W={3*width_N}   L={2*LAMBDA}
++ AS={5*3*width_N*LAMBDA} PS={10*LAMBDA+2*3*width_N} AD={5*3*width_N*LAMBDA} PD={10*LAMBDA+2*3*width_N}
+.ends NAND_3
+
+.subckt NAND_4 A B C D Y vdd gnd
+.param LAMBDA = 0.09u
+.param width_N = {20*LAMBDA}
+.param width_P = {2.5*width_N}
+Mp_A_PUN  vdd A Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_B_PUN  vdd B Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_C_PUN  vdd C Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_D_PUN  vdd D Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mn_A_PDN Y  A x1 gnd CMOSN  W={4*width_N}   L={2*LAMBDA}
++ AS={5*4*width_N*LAMBDA} PS={10*LAMBDA+2*4*width_N} AD={5*4*width_N*LAMBDA} PD={10*LAMBDA+2*4*width_N}
+Mn_B_PDN x1 B x2 gnd CMOSN  W={4*width_N}   L={2*LAMBDA}
++ AS={5*4*width_N*LAMBDA} PS={10*LAMBDA+2*4*width_N} AD={5*4*width_N*LAMBDA} PD={10*LAMBDA+2*4*width_N}
+Mn_C_PDN x2 C x3 gnd CMOSN  W={4*width_N}   L={2*LAMBDA}
++ AS={5*4*width_N*LAMBDA} PS={10*LAMBDA+2*4*width_N} AD={5*4*width_N*LAMBDA} PD={10*LAMBDA+2*4*width_N}
+Mn_D_PDN x3 D gnd gnd CMOSN  W={4*width_N}   L={2*LAMBDA}
++ AS={5*4*width_N*LAMBDA} PS={10*LAMBDA+2*4*width_N} AD={5*4*width_N*LAMBDA} PD={10*LAMBDA+2*4*width_N}
+.ends NAND_4
+
+.subckt NAND_5 A B C D E Y vdd gnd
+.param LAMBDA = 0.09u
+.param width_N = {20*LAMBDA}
+.param width_P = {2.5*width_N}
+Mp_A_PUN  vdd A Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_B_PUN  vdd B Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_C_PUN  vdd C Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_D_PUN  vdd D Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mp_E_PUN  vdd E Y vdd CMOSP W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mn_A_PDN Y  A x1 gnd CMOSN  W={5*width_N}   L={2*LAMBDA}
++ AS={5*5*width_N*LAMBDA} PS={10*LAMBDA+2*5*width_N} AD={5*5*width_N*LAMBDA} PD={10*LAMBDA+2*5*width_N}
+Mn_B_PDN x1 B x2 gnd CMOSN  W={5*width_N}   L={2*LAMBDA}
++ AS={5*5*width_N*LAMBDA} PS={10*LAMBDA+2*5*width_N} AD={5*5*width_N*LAMBDA} PD={10*LAMBDA+2*5*width_N}
+Mn_C_PDN x2 C x3 gnd CMOSN  W={5*width_N}   L={2*LAMBDA}
++ AS={5*5*width_N*LAMBDA} PS={10*LAMBDA+2*5*width_N} AD={5*5*width_N*LAMBDA} PD={10*LAMBDA+2*5*width_N}
+Mn_D_PDN x3 D x4 gnd CMOSN  W={5*width_N}   L={2*LAMBDA}
++ AS={5*5*width_N*LAMBDA} PS={10*LAMBDA+2*5*width_N} AD={5*5*width_N*LAMBDA} PD={10*LAMBDA+2*5*width_N}
+Mn_E_PDN x4 E gnd gnd CMOSN  W={5*width_N}   L={2*LAMBDA}
++ AS={5*5*width_N*LAMBDA} PS={10*LAMBDA+2*5*width_N} AD={5*5*width_N*LAMBDA} PD={10*LAMBDA+2*5*width_N}
+.ends NAND_5
+
+
+X_D_FF_A0 A0 clk Q_A0 vdd gnd D_FF
+X_D_FF_A1 A1 clk Q_A1 vdd gnd D_FF
+X_D_FF_A2 A2 clk Q_A2 vdd gnd D_FF
+X_D_FF_A3 A3 clk Q_A3 vdd gnd D_FF
+X_D_FF_A4 A4 clk Q_A4 vdd gnd D_FF
+
+X_D_FF_B0 B0 clk Q_B0 vdd gnd D_FF
+X_D_FF_B1 B1 clk Q_B1 vdd gnd D_FF
+X_D_FF_B2 B2 clk Q_B2 vdd gnd D_FF
+X_D_FF_B3 B3 clk Q_B3 vdd gnd D_FF
+X_D_FF_B4 B4 clk Q_B4 vdd gnd D_FF
+
+X_G0_bar Q_A0 Q_B0 G0_bar vdd gnd NAND_2
+X_G1_bar Q_A1 Q_B1 G1_bar vdd gnd NAND_2
+X_G2_bar Q_A2 Q_B2 G2_bar vdd gnd NAND_2
+X_G3_bar Q_A3 Q_B3 G3_bar vdd gnd NAND_2
+X_G4_bar Q_A4 Q_B4 G4_bar vdd gnd NAND_2
+
+X_G0 G0_bar G0 vdd gnd inv
+X_G1 G1_bar G1 vdd gnd inv
+X_G2 G2_bar G2 vdd gnd inv
+X_G3 G3_bar G3 vdd gnd inv
+X_G4 G4_bar G4 vdd gnd inv
+
+X_P0 Q_A0 Q_B0 P0 vdd gnd XOR
+X_P1 Q_A1 Q_B1 P1 vdd gnd XOR
+X_P2 Q_A2 Q_B2 P2 vdd gnd XOR
+X_P3 Q_A3 Q_B3 P3 vdd gnd XOR
+X_P4 Q_A4 Q_B4 P4 vdd gnd XOR
+
+X_C1 G0_bar G0_bar C1 vdd gnd NAND_2
+
+X_P1G0 P1 G0 P1G0 vdd gnd NAND_2
+X_C2 G1_bar P1G0 C2 vdd gnd NAND_2
+
+X_P2G1 P2 G1 P2G1 vdd gnd NAND_2
+X_P2P1G0 P2 P1 G0 P2P1G0 vdd gnd NAND_3
+X_C3 G2_bar P2G1 P2P1G0 C3 vdd gnd NAND_3
+
+X_P3G2 P3 G2 P3G2 vdd gnd NAND_2
+X_P3P2G1 P3 P2 G1_bar P3P2G1 vdd gnd NAND_3
+X_P3P2P1G0 P3 P2 P1 G0 P3P2P1G0 vdd gnd NAND_4
+X_C4 G3_bar P3G2 P3P2G1 P3P2P1G0 C4 vdd gnd NAND_4
+
+X_P4G3 P4 G3 P4G3 vdd gnd NAND_2
+X_P4P3G2 P4 P3 G2 P4P3G2 vdd gnd NAND_3
+X_P4P3P2G1 P4 P3 P2 G1 P4P3P2G vdd gnd NAND_4
+X_P4P3P2P1G0 P4 P3 P2 P1 G0 P4P3P2P1G0 vdd gnd NAND_5
+X_C5 G4_bar P4G3 P4P3G2 P4P3P2G1 P4P3P2P1G0 C5 vdd gnd NAND_5
+
+X_S0 P0 gnd S0 vdd gnd XOR
+X_S1 P1 C1  S1 vdd gnd XOR
+X_S2 P2 C2  S2 vdd gnd XOR
+X_S3 P3 C3  S3 vdd gnd XOR
+X_S4 P4 C4  S4 vdd gnd XOR
+
+X_D_FF_S0 S0 clk sum0 vdd gnd D_FF
+X_D_FF_S1 S1 clk sum1 vdd gnd D_FF
+X_D_FF_S2 S2 clk sum2 vdd gnd D_FF
+X_D_FF_S3 S3 clk sum3 vdd gnd D_FF
+X_D_FF_S4 S4 clk sum4 vdd gnd D_FF
+
+X_D_FF_C5 C5 clk carry vdd gnd D_FF
+
+.subckt output_load A A_bar vdd gnd
+.param LAMBDA = 0.09u
+.param width_N = {10*LAMBDA}
+.param width_P = {2*width_N}
+Mn_inv      A_bar       A       gnd    gnd  CMOSN   W={width_N}   L={2*LAMBDA}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N} AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+Mp_inv      A_bar       A       vdd    vdd  CMOSP   W={width_P}   L={2*LAMBDA}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P} AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}   
+.ends output_load 
+
+X_load_sum0 sum0 sum0_bar vdd gnd output_load
+X_load_sum1 sum1 sum1_bar vdd gnd output_load
+X_load_sum2 sum2 sum2_bar vdd gnd output_load
+X_load_sum3 sum3 sum3_bar vdd gnd output_load
+X_load_sum4 sum4 sum4_bar vdd gnd output_load
+
+X_load_carry carry carry_bar vdd gnd output_load
+
+
+.tran 10p 150n
+.control
+set hcopYpscolor = 1 *White background for saving plots
+set color0=white ** color0 is used to set the background of the plot (manual sec:17.7))
+set color1=black ** color1 is used to set the grid color of the plot (manual sec:17.7))
+run
+let half_vdd = 0.9
+
+
+set curplottitle="5-bit CLA Adder - Clock Signal"
+plot V(clk)
+
+set curplottitle="5-bit CLA Adder - Input A[4:0]"
+plot V(A0) V(A1)+2 V(A2)+4 V(A3)+6 V(A4)+8
+
+set curplottitle="5-bit CLA Adder - Input B[4:0]"
+plot V(B0) V(B1)+2 V(B2)+4 V(B3)+6 V(B4)+8
+
+set curplottitle="5-bit CLA Adder - Registered A[4:0]"
+plot V(Q_A0) V(Q_A1)+2 V(Q_A2)+4 V(Q_A3)+6 V(Q_A4)+8
+
+set curplottitle="5-bit CLA Adder - Registered B[4:0]"
+plot V(Q_B0) V(Q_B1)+2 V(Q_B2)+4 V(Q_B3)+6 V(Q_B4)+8
+
+set curplottitle="5-bit CLA Adder - Propagate P[4:0]"
+plot V(P0) V(P1)+2 V(P2)+4 V(P3)+6 V(P4)+8
+
+set curplottitle="5-bit CLA Adder - Generate G[4:0]"
+plot V(G0) V(G1)+2 V(G2)+4 V(G3)+6 V(G4)+8
+
+set curplottitle="5-bit CLA Adder - Carry Signals C[5:1]"
+plot V(C1) V(C2)+2 V(C3)+4 V(C4)+6 V(C5)+8
+
+set curplottitle="5-bit CLA Adder - Sum before FF S[4:0]"
+plot V(S0) V(S1)+2 V(S2)+4 V(S3)+6 V(S4)+8
+
+set curplottitle="5-bit CLA Adder - Final Output Sum[4:0] and Carry"
+plot V(sum0) V(sum1)+2 V(sum2)+4 V(sum3)+6 V(sum4)+8 V(carry)+10
+
+set curplottitle="5-bit CLA Adder - Bit 0 Input-Output with Clock"
+plot V(A0) V(B0)+2 V(S0)+4 V(clk)+6
+
+meas tran t_a0_rise WHEN V(clk)=half_vdd RISE=2
+meas tran t_s0_rise WHEN V(Q_A0)=half_vdd RISE=1  
+let t_prop_rise = t_s0_rise - t_a0_rise
+print t_prop_rise
+
+meas tran t_a0 WHEN V(clk)=half_vdd RISE=3
+meas tran t_s0_fall WHEN V(Q_A0)=half_vdd FALL=1 
+let t_prop_fall = t_s0_fall - t_a0
+print t_prop_fall
+let t_AS = (t_prop_fall + t_prop_rise)/2
+print t_AS
+
+meas tran t_b0_50_rise  WHEN v(b0)=0.9 RISE=1
+meas tran t_s4_50_rise  WHEN v(s4)=0.9 RISE=1
+
+meas tran t_b0_50_fall  WHEN v(b0)=0.9 RISE=5
+meas tran t_s4_50_fall  WHEN v(s4)=0.9 FALL=1
+let Rise_delay  = t_s4_50_rise - t_b0_50_rise
+let Fall_delay  = t_s4_50_fall - t_b0_50_fall
+let T_worst = abs(Rise_delay/2)+abs(Fall_delay/2)
+print T_worst
+
+meas tran t_b2_50_rise  WHEN v(b2)=0.9 RISE=1
+meas tran t_s2_50_rise  WHEN v(s2)=0.9 RISE=1
+
+meas tran t_b2_50_fall  WHEN v(b2)=0.9 FALL=1
+meas tran t_s2_50_fall  WHEN v(s2)=0.9 RISE=1
+let Rise_delay_1  = t_s2_50_rise - t_b2_50_rise
+let Fall_delay_1  = t_s2_50_fall - t_b2_50_fall
+let T_sum = abs(Rise_delay_1/2)+abs(Fall_delay_1/2)
+print T_sum
+
+meas tran t_b2_50_rise  WHEN v(b2)=0.9 RISE=1
+meas tran t_g2_50_rise  WHEN v(g2)=0.9 RISE=1
+
+meas tran t_b2_50_fall  WHEN v(b2)=0.9 FALL=1
+meas tran t_g2_50_fall  WHEN v(g2)=0.9 FALL=1
+let Rise_delay_2  = t_b2_50_rise - t_g2_50_rise
+let Fall_delay_2  = t_b2_50_fall - t_g2_50_fall
+let T_generate = abs(Rise_delay_2/2)+abs(Fall_delay_2/2)
+print T_generate
+
+
+meas tran t_b2_50_rise  WHEN v(b2)=0.9 RISE=1
+meas tran t_c2_50_rise  WHEN v(c2)=0.9 RISE=1
+
+meas tran t_b2_50_fall  WHEN v(b2)=0.9 FALL=1
+meas tran t_c2_50_fall  WHEN v(c2)=0.9 RISE=1
+let Rise_delay_3  = t_b2_50_rise - t_c2_50_rise
+let Fall_delay_3  = t_b2_50_fall - t_c2_50_fall
+let T_carry = abs(Rise_delay_3/2)+abs(Fall_delay_3/2)
+print T_carry
+
+* Delay measurements for A2 to Q_A2
+meas tran t_a2_rise WHEN V(clk)=half_vdd RISE=2
+meas tran t_qa2_rise WHEN V(Q_A2)=half_vdd RISE=1  
+let t_prop_rise_a2 = t_qa2_rise - t_a2_rise
+print t_prop_rise_a2
+
+meas tran t_a2_fall WHEN V(clk)=half_vdd RISE=3
+meas tran t_qa2_fall WHEN V(Q_A2)=half_vdd FALL=1 
+let t_prop_fall_a2 = t_qa2_fall - t_a2_fall
+print t_prop_fall_a2
+let t_A2_to_QA2 = (t_prop_fall_a2 + t_prop_rise_a2)/2
+print t_A2_to_QA2
+
+meas tran t_s2_rise WHEN V(S2)=half_vdd RISE=1
+meas tran t_sum2_rise WHEN V(sum2)=half_vdd RISE=1  
+let t_prop_rise_s2 = t_sum2_rise - t_s2_rise
+print t_prop_rise_s2
+
+meas tran t_s2_fall WHEN V(S2)=half_vdd FALL=1
+meas tran t_sum2_fall WHEN V(sum2)=half_vdd FALL=1 
+let t_prop_fall_s2 = t_sum2_fall - t_s2_fall
+print t_prop_fall_s2
+let t_S2_to_sum2 = (t_prop_fall_s2 + t_prop_rise_s2)/2
+print t_S2_to_sum2
+
+echo "* FUNCTIONAL VERIFICATION - TEST CASES"
+
+meas tran sum0_tc1 FIND V(sum0) AT=108n
+meas tran sum1_tc1 FIND V(sum1) AT=108n
+meas tran sum2_tc1 FIND V(sum2) AT=108n
+meas tran sum3_tc1 FIND V(sum3) AT=108n
+meas tran sum4_tc1 FIND V(sum4) AT=108n
+meas tran carry_tc1 FIND V(carry) AT=108n
+
+echo "Test Case 1: 00001 + 00001 = 00010"
+echo "Expected: Sum=00010, Carry=0"
+
+meas tran sum0_tc2 FIND V(sum0) AT=124n
+meas tran sum1_tc2 FIND V(sum1) AT=124n
+meas tran sum2_tc2 FIND V(sum2) AT=124n
+meas tran sum3_tc2 FIND V(sum3) AT=124n
+meas tran sum4_tc2 FIND V(sum4) AT=124n
+meas tran carry_tc2 FIND V(carry) AT=124n
+
+echo "Test Case 2: 00011 + 00011 = 00110"
+echo "Expected: Sum=00110, Carry=0"
+
+meas tran sum0_tc3 FIND V(sum0) AT=140n
+meas tran sum1_tc3 FIND V(sum1) AT=140n
+meas tran sum2_tc3 FIND V(sum2) AT=140n
+meas tran sum3_tc3 FIND V(sum3) AT=140n
+meas tran sum4_tc3 FIND V(sum4) AT=140n
+meas tran carry_tc3 FIND V(carry) AT=140n
+
+echo "Test Case 3: 00111 + 00111 = 01110"
+echo "Expected: Sum=01110, Carry=0"
+
+.endc

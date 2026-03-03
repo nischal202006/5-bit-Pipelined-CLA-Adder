@@ -1,0 +1,114 @@
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param width_P = 2.5*width_N
+.global gnd vdd
+.PARAM VDD_val = 1.8
+
+V_A A gnd PULSE(0 {VDD_val} 2n 100p 100p 32n 64n)
+V_B B gnd PULSE(0 {VDD_val} 2n 100p 100p 16n 32n)
+V_C C gnd PULSE(0 {VDD_val} 2n 100p 100p 8n 16n)
+V_D D gnd PULSE(0 {VDD_val} 2n 100p 100p 4n 8n)
+V_E E gnd PULSE(0 {VDD_val} 2n 100p 100p 2n 4n)
+VDD vdd gnd 1.8
+*  D G S B
+* SPICE3 file created from NAND5.ext - technology: scmos
+
+.option scale=0.09u
+
+M1000 a_30_n9# B a_22_n9# Gnd CMOSN w=100 l=2
++  ad=600 pd=212 as=600 ps=212
+M1001 Y C vdd w_9_100# CMOSP w=50 l=2
++  ad=850 pd=334 as=850 ps=334
+M1002 Y E a_46_n9# Gnd CMOSN w=100 l=2
++  ad=500 pd=210 as=600 ps=212
+M1003 vdd D Y w_9_100# CMOSP w=50 l=2
++  ad=0 pd=0 as=0 ps=0
+M1004 a_38_n9# C a_30_n9# Gnd CMOSN w=100 l=2
++  ad=600 pd=212 as=0 ps=0
+M1005 Y E vdd w_9_100# CMOSP w=50 l=2
++  ad=0 pd=0 as=0 ps=0
+M1006 a_22_n9# A gnd Gnd CMOSN w=100 l=2
++  ad=0 pd=0 as=500 ps=210
+M1007 a_46_n9# D a_38_n9# Gnd CMOSN w=100 l=2
++  ad=0 pd=0 as=0 ps=0
+M1008 vdd B Y w_9_100# CMOSP w=50 l=2
++  ad=0 pd=0 as=0 ps=0
+M1009 Y A vdd w_9_100# CMOSP w=50 l=2
++  ad=0 pd=0 as=0 ps=0
+C0 A B 0.24fF
+C1 a_46_n9# Y 1.09fF
+C2 gnd Y 0.03fF
+C3 E Y 0.08fF
+C4 E vdd 0.08fF
+C5 C D 0.24fF
+C6 w_9_100# Y 0.12fF
+C7 C B 0.24fF
+C8 w_9_100# vdd 0.17fF
+C9 E D 0.24fF
+C10 Y a_30_n9# 0.05fF
+C11 w_9_100# D 0.08fF
+C12 vdd Y 2.68fF
+C13 a_46_n9# a_38_n9# 1.03fF
+C14 w_9_100# A 0.08fF
+C15 w_9_100# B 0.08fF
+C16 gnd a_22_n9# 1.03fF
+C17 Y D 0.08fF
+C18 vdd D 0.08fF
+C19 w_9_100# C 0.08fF
+C20 Y B 0.08fF
+C21 A vdd 0.08fF
+C22 vdd B 0.08fF
+C23 a_30_n9# a_38_n9# 1.03fF
+C24 a_22_n9# a_30_n9# 1.03fF
+C25 E w_9_100# 0.08fF
+C26 Y a_38_n9# 0.05fF
+C27 a_22_n9# Y 0.05fF
+C28 C Y 0.08fF
+C29 vdd C 0.08fF
+C30 a_46_n9# Gnd 0.01fF
+C31 a_38_n9# Gnd 0.01fF
+C32 a_30_n9# Gnd 0.01fF
+C33 a_22_n9# Gnd 0.01fF
+C34 gnd Gnd 0.20fF
+C35 Y Gnd 0.18fF
+C36 vdd Gnd 0.15fF
+C37 E Gnd 0.17fF
+C38 D Gnd 0.17fF
+C39 C Gnd 0.17fF
+C40 B Gnd 0.17fF
+C41 A Gnd 0.17fF
+C42 w_9_100# Gnd 3.80fF
+
+
+.tran 10p 50n
+.control
+run
+set curplottitle="2024102070 5 input NAND Gate using CMOS Post Layout using Magic"
+ 
+plot V(A)+10 V(B)+8 V(C)+6 V(D)+4 V(E)+2 V(Y)
+let half_vdd = 0.9
+
+meas tran t_A_rise WHEN V(A)=half_vdd RISE=1
+meas tran t_Y_fall_A WHEN V(Y)=half_vdd FALL=1 TD=2n
+let tp_A = t_Y_fall_A - t_A_rise
+meas tran t_B_rise WHEN V(B)=half_vdd RISE=1
+meas tran t_Y_fall_B WHEN V(Y)=half_vdd FALL=1 TD=4n
+let tp_B = t_Y_fall_B - t_B_rise
+meas tran t_C_rise WHEN V(C)=half_vdd RISE=1
+meas tran t_Y_fall_C WHEN V(Y)=half_vdd FALL=1 TD=6n
+let tp_C = t_Y_fall_C - t_C_rise
+meas tran t_D_rise WHEN V(D)=half_vdd RISE=1
+meas tran t_Y_fall_D WHEN V(Y)=half_vdd FALL=1 TD=8n
+let tp_D = t_Y_fall_D - t_D_rise
+meas tran t_E_fall WHEN V(E)=half_vdd FALL=1
+meas tran t_Y_rise_E WHEN V(Y)=half_vdd RISE=1 TD=10n
+let tp_E = t_Y_rise_E - t_E_fall
+meas tran tphl trig v(a) val=0.9 rise=1 targ v(y) val=0.9 fall=1
+meas tran tplh trig v(e) val=0.9 fall=1 targ v(y) val=0.9 rise=1
+let tp_avg = (tphl + tplh) / 2
+let tp_max = max(tp_A, tp_B, tp_C, tp_D, tp_E)
+let tp_min = min(tp_A, tp_B, tp_C, tp_D, tp_E)
+print tphl tplh tp_avg
+
+.endc

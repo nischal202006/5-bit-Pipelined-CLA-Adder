@@ -1,0 +1,43 @@
+* SPICE3 file created from NAND3.ext - technology: scmos
+
+.option scale=0.09u
+
+M1000 vdd b Y w_9_53# pfet w=50 l=2
++  ad=550 pd=222 as=550 ps=222
+M1001 a_30_n16# b a_22_n16# Gnd nfet w=60 l=2
++  ad=360 pd=132 as=360 ps=132
+M1002 Y c vdd w_9_53# pfet w=50 l=2
++  ad=0 pd=0 as=0 ps=0
+M1003 a_22_n16# a gnd Gnd nfet w=60 l=2
++  ad=0 pd=0 as=300 ps=130
+M1004 Y a vdd w_9_53# pfet w=50 l=2
++  ad=0 pd=0 as=0 ps=0
+M1005 Y c a_30_n16# Gnd nfet w=60 l=2
++  ad=300 pd=130 as=0 ps=0
+C0 c w_9_53# 0.08fF
+C1 c Y 0.08fF
+C2 b vdd 0.13fF
+C3 b w_9_53# 0.08fF
+C4 a_30_n16# a_22_n16# 0.62fF
+C5 Y a_30_n16# 0.67fF
+C6 b Y 0.08fF
+C7 a vdd 0.13fF
+C8 c b 0.24fF
+C9 a w_9_53# 0.08fF
+C10 gnd a_22_n16# 0.62fF
+C11 gnd Y 0.03fF
+C12 w_9_53# vdd 0.12fF
+C13 Y vdd 1.60fF
+C14 a b 0.24fF
+C15 Y w_9_53# 0.10fF
+C16 c vdd 0.13fF
+C17 Y a_22_n16# 0.05fF
+C18 a_30_n16# Gnd 0.01fF
+C19 a_22_n16# Gnd 0.01fF
+C20 gnd Gnd 0.14fF
+C21 Y Gnd 0.19fF
+C22 vdd Gnd 0.11fF
+C23 c Gnd 0.08fF
+C24 b Gnd 0.11fF
+C25 a Gnd 0.11fF
+C26 w_9_53# Gnd 2.49fF
