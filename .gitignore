@@ -1,55 +1,87 @@
-# Prerequisites
-*.d
+###################################################
+# 🔹 GENERAL
+###################################################
+*.log
+*.tmp
+*.bak
+*.backup
+*.swp
+*~
+.DS_Store
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+###################################################
+# 🔹 MAGIC VLSI
+###################################################
+*.ext
+*.res.ext
+*.spice
+*.sim
+*.nodes
+*.ps
+*.eps
+*.svg
+*.gds
+*.mag~
+*.raw
+*.dump
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# Extraction / LVS temporary
+*.al
+*.tr
+*.ckpt
 
-# Precompiled Headers
-*.gch
-*.pch
+###################################################
+# 🔹 NGSPICE
+###################################################
+*.raw
+*.ac
+*.op
+*.measure
+*.mt0
+*.mt1
+*.st0
+*.log
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+# Temporary netlists
+*_extracted.spice
+*_postlayout.spice
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
+###################################################
+# 🔹 Verilog / Icarus Verilog
+###################################################
+*.vvp
+*.vcd
 *.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+*.cf
+*.ivl
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+# GTKWave
+*.gtkw
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+###################################################
+# 🔹 FPGA (Vivado / Quartus Generic)
+###################################################
+*.jou
+*.str
+*.wdb
+*.xpr
+*.runs
+*.cache
+*.hw
+*.ip_user_files/
+*.sim/
+*.gen/
+*.qpf
+*.qsf
+*.sof
+*.bit
+*.bin
+*.rpt
 
-# debug information files
-*.dwo
+###################################################
+# 🔹 Build Folders
+###################################################
+build/
+sim/
+output/
+runs/
