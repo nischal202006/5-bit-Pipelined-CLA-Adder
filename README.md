@@ -1,8 +1,9 @@
 # 5-Bit Carry Lookahead Adder (CLA) Design & Layout
 
 This project involves the full-custom design and physical layout of a **5-bit Carry Lookahead Adder (CLA)**. The design focuses on optimizing arithmetic speed by calculating carry bits in parallel, significantly reducing the propagation delay compared to a standard Ripple Carry Adder (RCA).
-
-## 🚀 Project Overview
+## Author 
+Name: Ganipisetty Nischal Rollno: 2024102070
+## Project Overview
 The Carry Lookahead Adder is a critical component in high-performance digital signal processors and ALUs. This implementation covers the entire VLSI design flow, from logic gate characterization to physical layout extraction and SPICE simulation.
 
 ### Key Features
@@ -16,7 +17,7 @@ The Carry Lookahead Adder is a critical component in high-performance digital si
 
 ---
 
-## 🛠️ Technical Specifications & Logic
+##  Technical Specifications & Logic
 The CLA avoids the "ripple" effect by using the following Boolean logic for each bit $i$:
 
 * **Generate ($G_i$):** $G_i = A_i \cdot B_i$
@@ -53,5 +54,3 @@ $$C_5 = G_4 + P_4 G_3 + P_4 P_3 G_2 + P_4 P_3 P_2 G_1 + P_4 P_3 P_2 P_1 G_0 + P_
 * `/Spice`: Extracted `.spice` netlists and simulation scripts.
 * `/Docs`: Detailed project report including timing diagrams and DRC results.
 
----
-*Developed as part of the VLSI System Design Course Project.*
